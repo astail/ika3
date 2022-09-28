@@ -10,6 +10,7 @@ RUNNING_PID
 .bundle
 node_modules
 .env
+.bsp
 
 # idea
 .idea_modules
