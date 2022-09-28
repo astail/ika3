@@ -27,10 +27,10 @@ libraryDependencies ++= Seq(
 
 enablePlugins(JavaAppPackaging)
 
-sourceGenerators in Compile += Def.task {
+Compile / sourceGenerators += Def.task {
   import scala.sys.process.Process
 
-  val file = (sourceManaged in Compile).value / "net" / "astail" / "Git.scala"
+  val file = (Compile / sourceManaged).value / "net" / "astail" / "Git.scala"
   val longHash = Process("""git log -1 --format="%H"""").!!
   val shortHash = Process("""git log -1 --format="%h"""").!!
   val log = Process("git show -s").!!
