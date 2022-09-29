@@ -1,12 +1,14 @@
 package net.astail
 
+import com.typesafe.config.ConfigFactory
 import org.slf4j.{Logger, LoggerFactory}
 
 object Main {
+  val tag = net.astail.Git.tag
+  val rev = net.astail.Git.shortHash
+  val token = ConfigFactory.load.getString("ika3_discord_token")
+  val logger: Logger = LoggerFactory.getLogger(this.getClass)
   def main(args: Array[String]): Unit = {
-    val tag = net.astail.Git.tag
-    val rev = net.astail.Git.shortHash
-    val logger: Logger = LoggerFactory.getLogger(this.getClass)
 
     s"""
        | ==================== start ika3 ===================
@@ -17,5 +19,8 @@ object Main {
        | ===================================================
        """.stripMargin.split('\n').foreach(logger.info)
 
+    discord.activityUpdate("test")
+    discord.setupBuilder
+    discord.slash
   }
 }

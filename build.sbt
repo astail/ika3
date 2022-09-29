@@ -6,6 +6,8 @@ version := "0.1.0-SNAPSHOT"
 
 scalaVersion := "2.13.8"
 
+fork := true
+
 resolvers ++= Seq(
   "spring.io" at "https://repo.spring.io/plugins-release/",
   "jcenter.bintray.com" at "https://jcenter.bintray.com"
@@ -14,7 +16,7 @@ resolvers ++= Seq(
 libraryDependencies ++= Seq(
   "com.github.nscala-time" %% "nscala-time" % "2.32.0",
   "com.typesafe" % "config" % "1.4.2",
-  "net.dv8tion" % "JDA" % "4.2.0_247",
+  "net.dv8tion" % "JDA" % "5.0.0-alpha.20",
   "com.danielasfregola" %% "twitter4s" % "8.0",
   "ch.qos.logback" % "logback-classic" % "1.4.0",
   "org.slf4j" % "slf4j-api" % "2.0.0",
