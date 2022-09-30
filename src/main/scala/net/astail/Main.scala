@@ -19,8 +19,8 @@ object Main {
        | ===================================================
        """.stripMargin.split('\n').foreach(logger.info)
 
-    discord.activityUpdate("test")
+    //discord.activityUpdate("test")
     discord.setupBuilder
-    discord.slash
+    //discord.slash
   }
 }
