@@ -22,6 +22,6 @@ object Main {
 
     //discord.activityUpdate("test")
     discord.setupBuilder
-    //discord.slash
+    discord.slash
   }
 }
