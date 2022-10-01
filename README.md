@@ -3,6 +3,7 @@
 ```
 $ cat .env
 IKA3_DISCORD_TOKEN="ABCDEFGHIABCABCABCABCACBAB.ABCABC.jdeoijidjwdioewjdoiewjodiejwiodjewoddd"
+TWITTER_ID="your_twitter_id"
 ```
 
 ```

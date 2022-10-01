@@ -1,5 +1,6 @@
 package net.astail
 
+import net.astail.Main.twitter_id
 import org.json4s.DefaultFormats
 import org.json4s.jackson.JsonMethods.parse
 
@@ -12,7 +13,7 @@ object ika {
   def result(api: String) = {
     val url = api
     val requestProperties = Map(
-      "User-Agent" -> "twitter @astel4696"
+      "User-Agent" -> s"twitter @${twitter_id}"
     )
 
     val connection = new URL(url).openConnection
