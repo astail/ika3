@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+  ika3:
+    image: ika3:0.1.0-SNAPSHOT
+    environment:
+      TZ: 'Asia/Tokyo'
+      IKA3_DISCORD_TOKEN: ${IKA3_DISCORD_TOKEN}

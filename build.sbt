@@ -27,7 +27,8 @@ libraryDependencies ++= Seq(
   "org.jsoup" % "jsoup" % "1.15.3"
 )
 
-enablePlugins(JavaAppPackaging)
+enablePlugins(JavaAppPackaging, AshScriptPlugin, DockerPlugin)
+dockerBaseImage := "openjdk:11-jre"
 
 Compile / sourceGenerators += Def.task {
   import scala.sys.process.Process
