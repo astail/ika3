@@ -1,5 +1,6 @@
 package net.astail
 
+import net.astail.ImageMagickWrapper.delImage
 import net.astail.Main.{rev, token}
 import net.astail.ika._
 import net.dv8tion.jda.api.JDABuilder
@@ -7,10 +8,11 @@ import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
-import net.dv8tion.jda.api.utils.Compression
+import net.dv8tion.jda.api.utils.{Compression, FileUpload}
 import net.dv8tion.jda.api.utils.cache.CacheFlag
 import org.slf4j.{Logger, LoggerFactory}
 
+import java.io.File
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -34,14 +36,14 @@ object discord {
     builder.build.getPresence.setActivity(Activity.playing(st))
   }
 
-  def slash = {
+  def setupSlashCommand = {
       val jda = JDABuilder.createDefault(token)
-        .addEventListeners(new Bot)
+        .addEventListeners(new SlashCommand)
         .build
       jda.upsertCommand("coop", "Information on the current coop").queue()
     }
 
-  class Bot extends ListenerAdapter {
+  class SlashCommand extends ListenerAdapter {
     override def onSlashCommandInteraction(event: SlashCommandInteractionEvent): Unit = {
       val message = event.getName
       message match {
@@ -66,16 +68,24 @@ object discord {
       val userId = event.getMember.getUser.getIdLong
       val message = event.getMessage.getContentDisplay
 
-      def sendMessage(x: String) = event.getChannel.sendMessage(x).queue
+      def sendMessage(x: String) = event.getChannel.sendMessage(x).queue()
 
+      def uploadFile(x: String, filePath: String) = {
+        event.getChannel.sendMessage(x).addFiles(FileUpload.fromData(new File(filePath))).queue()
+      }
 
       def messageMatch = {
         message.diff(s"@$botName").trim match {
           case "test" => sendMessage(s"userId: ${userId}, botName: ${botName}, userNameGet: ${userNameGet}")
-          case "coop" => sendMessage(coopToDiscord)
+          case "coop" => {
+            sendMessage("確認中")
+            uploadFile(coopToDiscord, coopImage)
+            delImage(coopImage)
+          }
           case _ => None
         }
       }
+
 
       if (!event.getAuthor.isBot) {
         Future {

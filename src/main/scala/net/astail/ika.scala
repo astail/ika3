@@ -5,8 +5,8 @@ import org.json4s.DefaultFormats
 import org.json4s.jackson.JsonMethods.parse
 import org.joda.time.DateTime
 import org.joda.time.Hours
-
-import com.github.nscala_time.time.Imports._
+import com.github.nscala_time.time.Imports.{DateTime, _}
+import net.astail.ImageMagickWrapper.{Height, Width, delImage, imageAppend, resize, sizeCheck}
 
 import java.net.URL
 import scala.io.Source
@@ -39,7 +39,7 @@ object ika {
 
   def coopToDiscord: String = {
     val coop = coopGetNow
-    val timestamp: DateTime = DateTime.now()
+    val timestamp: DateTime = org.joda.time.DateTime.now()
     val kumaSan: String = {
       val endHour: Int = Hours.hoursBetween(timestamp, coop.end_time.toDateTime).getHours()
       s"バイト募集中 @${endHour}時間"
@@ -48,8 +48,24 @@ object ika {
     s"""${kumaSan}
        |時間: ${timeDisplay(coop.start_time)} ~ ${timeDisplay(coop.end_time)}
        |ステージ: ${coop.stage.name}
-       |武器: ${coop.weapons.map(_.name).mkString(",")}
+       |武器: ${coop.weapons.map(_.name).mkString(", ")}
        |""".stripMargin
+  }
+
+  def mergeWeaponsAndMaps(stageImageURL: String, weaponsImageURL: List[String]): String = {
+    val mapData = sizeCheck(stageImageURL)
+    val weaponsImage: String = imageAppend(weaponsImageURL, Width)
+    val resizeWeaponsImage: String = resize(weaponsImage, mapData.width, Width)
+    val merge = imageAppend(List(stageImageURL, resizeWeaponsImage), Height)
+    delImage(resizeWeaponsImage)
+    merge
+  }
+
+  def coopImage: String = {
+    val coop = coopGetNow
+    val stageImageURL: String = coop.stage.image
+    val weaponsImageURL: List[String] = coop.weapons.map(_.image)
+    mergeWeaponsAndMaps(stageImageURL, weaponsImageURL)
   }
 
 }

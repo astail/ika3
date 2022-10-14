@@ -9,19 +9,19 @@ object Main {
   val twitter_id = ConfigFactory.load.getString("twitter_id")
   val token = ConfigFactory.load.getString("ika3_discord_token")
   val logger: Logger = LoggerFactory.getLogger(this.getClass)
+
   def main(args: Array[String]): Unit = {
 
     s"""
        | ==================== start ika3 ===================
        |
        |    tag : $tag
-       |    rev : $rev
+       |    rev : $rev　　　　　　　　　　　　
        |
        | ===================================================
        """.stripMargin.split('\n').foreach(logger.info)
 
-    //discord.activityUpdate("test")
     discord.setupBuilder
-    discord.slash
+    discord.setupSlashCommand
   }
 }
