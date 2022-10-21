@@ -37,17 +37,19 @@ object discord {
   }
 
   def setupSlashCommand = {
-      val jda = JDABuilder.createDefault(token)
-        .addEventListeners(new SlashCommand)
-        .build
-      jda.upsertCommand("coop", "Information on the current coop").queue()
-    }
+    val jda = JDABuilder.createDefault(token)
+      .addEventListeners(new SlashCommand)
+      .build
+    jda.upsertCommand("coop", "今のサーモンランの情報を返します").queue()
+    jda.upsertCommand("coop-n", "次のサーモンランの情報を返します").queue()
+  }
 
   class SlashCommand extends ListenerAdapter {
     override def onSlashCommandInteraction(event: SlashCommandInteractionEvent): Unit = {
       val message = event.getName
       message match {
         case "coop" => event.reply(coopToDiscord(Now)).setEphemeral(true).queue()
+        case "coop-n" => event.reply(coopToDiscord(Next)).setEphemeral(true).queue()
         case _ => None
       }
     }
@@ -78,9 +80,15 @@ object discord {
         message.diff(s"@$botName").trim match {
           case "test" => sendMessage(s"userId: ${userId}, botName: ${botName}, userNameGet: ${userNameGet}")
           case "coop" => {
-            sendMessage("確認中")
+            sendMessage("今のサーモンラン情報を確認中")
             val imageDir = coopImage(Now)
             uploadFile(coopToDiscord(Now), imageDir)
+            delImage(imageDir)
+          }
+          case "coop-n" => {
+            sendMessage("次のサーモンラン情報を確認中")
+            val imageDir = coopImage(Next)
+            uploadFile(coopToDiscord(Next), imageDir)
             delImage(imageDir)
           }
           case _ => None

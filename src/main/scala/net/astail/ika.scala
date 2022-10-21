@@ -48,9 +48,11 @@ object ika {
   def coopToDiscord(p2: P2): String = {
     val coop = coopGet(p2: P2)
     val timestamp: DateTime = org.joda.time.DateTime.now()
-    val kumaSan: String = {
-      val endHour: Int = Hours.hoursBetween(timestamp, coop.end_time.toDateTime).getHours()
-      s"バイト募集中 @${endHour}時間"
+
+
+    val kumaSan = p2 match {
+      case Now => s"バイト募集中 @" + Hours.hoursBetween(timestamp, coop.end_time.toDateTime).getHours() + "時間"
+      case Next => s"次のバイトの時間まで @" +Hours.hoursBetween(timestamp, coop.start_time.toDateTime).getHours() + "時間"
     }
 
     s"""${kumaSan}
