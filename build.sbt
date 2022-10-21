@@ -28,7 +28,13 @@ libraryDependencies ++= Seq(
 )
 
 enablePlugins(JavaAppPackaging, AshScriptPlugin, DockerPlugin)
+
+import com.typesafe.sbt.packager.docker._
 dockerBaseImage := "openjdk:11-jre"
+dockerCommands ++= Seq(
+  Cmd("USER", "root"),
+  Cmd("RUN", "apt update && apt install -y imagemagick")
+)
 
 Compile / sourceGenerators += Def.task {
   import scala.sys.process.Process
