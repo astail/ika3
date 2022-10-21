@@ -7,3 +7,8 @@ case class Coop(start_time: String,
                 stage: Stage,
                 weapons: List[Weapons]
                )
+
+
+sealed trait P2
+case object Now extends P2
+case object Next extends P2

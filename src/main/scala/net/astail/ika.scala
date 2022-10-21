@@ -13,7 +13,9 @@ import scala.io.Source
 
 
 object ika {
-  val coopNow = "https://spla3.yuu26.com/api/coop-grouping-regular/now"
+
+  val coopUrl = "https://spla3.yuu26.com/api/coop-grouping-regular"
+
 
   def result(url: String) = {
     val requestProperties = Map(
@@ -28,8 +30,14 @@ object ika {
     parse(str)
   }
 
-  def coopGetNow: Coop = {
-    val jsonObj = result(coopNow)
+  def coopGet(p2: P2): Coop = {
+    val time = p2 match {
+      case Now => "now"
+      case Next => "next"
+    }
+    val url = s"${coopUrl}/${time}"
+
+    val jsonObj = result(url)
     implicit val formats = DefaultFormats
     (jsonObj \ "results").extract[List[Coop]].head
   }
@@ -37,8 +45,8 @@ object ika {
 
   def timeDisplay(time: String): String = time.toDateTime.toString("yyyy-MM-dd HH:mm")
 
-  def coopToDiscord: String = {
-    val coop = coopGetNow
+  def coopToDiscord(p2: P2): String = {
+    val coop = coopGet(p2: P2)
     val timestamp: DateTime = org.joda.time.DateTime.now()
     val kumaSan: String = {
       val endHour: Int = Hours.hoursBetween(timestamp, coop.end_time.toDateTime).getHours()
@@ -61,8 +69,8 @@ object ika {
     merge
   }
 
-  def coopImage: String = {
-    val coop = coopGetNow
+  def coopImage(p2: P2): String = {
+    val coop = coopGet(p2)
     val stageImageURL: String = coop.stage.image
     val weaponsImageURL: List[String] = coop.weapons.map(_.image)
     mergeWeaponsAndMaps(stageImageURL, weaponsImageURL)

@@ -47,7 +47,7 @@ object discord {
     override def onSlashCommandInteraction(event: SlashCommandInteractionEvent): Unit = {
       val message = event.getName
       message match {
-        case "coop" => event.reply(coopToDiscord).setEphemeral(true).queue()
+        case "coop" => event.reply(coopToDiscord(Now)).setEphemeral(true).queue()
         case _ => None
       }
     }
@@ -79,8 +79,9 @@ object discord {
           case "test" => sendMessage(s"userId: ${userId}, botName: ${botName}, userNameGet: ${userNameGet}")
           case "coop" => {
             sendMessage("確認中")
-            uploadFile(coopToDiscord, coopImage)
-            delImage(coopImage)
+            val imageDir = coopImage(Now)
+            uploadFile(coopToDiscord(Now), imageDir)
+            delImage(imageDir)
           }
           case _ => None
         }
