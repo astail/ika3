@@ -76,8 +76,27 @@ object discord {
         event.getChannel.sendMessage(x).addFiles(FileUpload.fromData(new File(filePath))).queue()
       }
 
+      val helpList = List("help", "--help", "-h", "version", "--version", "-v")
+
+      def help = {
+        sendMessage(
+          s"""
+             |今のサーモンラン:
+             |  `/coop`
+             |  `@$botName coop`
+             |
+             |次のサーモンラン:
+             |  `/coop-n`
+             |  `@$botName coop-n`
+             |
+             |version: `${rev}`
+             | """.stripMargin
+        )
+      }
+
       def messageMatch = {
         message.diff(s"@$botName").trim match {
+          case s if helpList.contains(s) => help
           case "test" => sendMessage(s"userId: ${userId}, botName: ${botName}, userNameGet: ${userNameGet}")
           case "coop" => {
             sendMessage("今のサーモンラン情報を確認中")
