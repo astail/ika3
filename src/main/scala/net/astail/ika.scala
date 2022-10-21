@@ -45,11 +45,8 @@ object ika {
 
   def timeDisplay(time: String): String = time.toDateTime.toString("yyyy-MM-dd HH:mm")
 
-  def coopToDiscord(p2: P2): String = {
-    val coop = coopGet(p2: P2)
+  def coopToDiscord(coop: Coop, p2: P2): String = {
     val timestamp: DateTime = org.joda.time.DateTime.now()
-
-
     val kumaSan = p2 match {
       case Now => s"バイト募集中 @" + Hours.hoursBetween(timestamp, coop.end_time.toDateTime).getHours() + "時間"
       case Next => s"次のバイトの時間まで @" +Hours.hoursBetween(timestamp, coop.start_time.toDateTime).getHours() + "時間"
@@ -71,8 +68,7 @@ object ika {
     merge
   }
 
-  def coopImage(p2: P2): String = {
-    val coop = coopGet(p2)
+  def coopImage(coop: Coop): String = {
     val stageImageURL: String = coop.stage.image
     val weaponsImageURL: List[String] = coop.weapons.map(_.image)
     mergeWeaponsAndMaps(stageImageURL, weaponsImageURL)

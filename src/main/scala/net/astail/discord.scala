@@ -48,8 +48,8 @@ object discord {
     override def onSlashCommandInteraction(event: SlashCommandInteractionEvent): Unit = {
       val message = event.getName
       message match {
-        case "coop" => event.reply(coopToDiscord(Now)).setEphemeral(true).queue()
-        case "coop-n" => event.reply(coopToDiscord(Next)).setEphemeral(true).queue()
+        case "coop" => event.reply(coopToDiscord(coopGet(Now), Now)).setEphemeral(true).queue()
+        case "coop-n" => event.reply(coopToDiscord(coopGet(Next), Next)).setEphemeral(true).queue()
         case _ => None
       }
     }
@@ -100,14 +100,16 @@ object discord {
           case "test" => sendMessage(s"userId: ${userId}, botName: ${botName}, userNameGet: ${userNameGet}")
           case "coop" => {
             sendMessage("今のサーモンラン情報を確認中")
-            val imageDir = coopImage(Now)
-            uploadFile(coopToDiscord(Now), imageDir)
+            val coop: Coop = coopGet(Now)
+            val imageDir = coopImage(coop)
+            uploadFile(coopToDiscord(coop, Now), imageDir)
             delImage(imageDir)
           }
           case "coop-n" => {
             sendMessage("次のサーモンラン情報を確認中")
-            val imageDir = coopImage(Next)
-            uploadFile(coopToDiscord(Next), imageDir)
+            val coop: Coop = coopGet(Next)
+            val imageDir = coopImage(coop)
+            uploadFile(coopToDiscord(coop, Next), imageDir)
             delImage(imageDir)
           }
           case _ => None
