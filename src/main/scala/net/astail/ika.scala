@@ -5,7 +5,7 @@ import org.json4s.DefaultFormats
 import org.json4s.jackson.JsonMethods.parse
 import org.joda.time.DateTime
 import org.joda.time.Hours
-import com.github.nscala_time.time.Imports.{DateTime, _}
+import com.github.nscala_time.time.Imports._
 import net.astail.ImageMagickWrapper.{Height, Width, delImage, imageAppend, resize, sizeCheck}
 
 import java.net.URL

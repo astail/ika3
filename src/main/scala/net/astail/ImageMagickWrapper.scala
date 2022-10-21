@@ -5,7 +5,7 @@ import org.joda.time.DateTime
 import sys.process._
 
 object ImageMagickWrapper {
-  val DESTIMAGEDIR = "./image"
+  val DESTIMAGEDIR = "/tmp"
 
   case class ImageIdentify(format: String, width: Int, height: Int)
 
